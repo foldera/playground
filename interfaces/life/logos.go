@@ -5,5 +5,8 @@ type Logos interface {
 }
 
 func Call(l Logos) string {
+	if l == nil {
+		return "nothing"
+	}
 	return l.makeSound()
 }

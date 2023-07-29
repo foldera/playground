@@ -12,4 +12,5 @@ func main() {
 	cat := new(life.Cat).With("Gypsy", "Tamijan", model.Height, model.Weight, model.Gender())
 	fmt.Println(cat)
 	fmt.Println("cat says", life.Call(cat))
+	fmt.Println("nil logos says: ...", life.Call(nil))
 }
