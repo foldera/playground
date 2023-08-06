@@ -2,12 +2,11 @@ package pool
 
 import "sync"
 
+var defaultObject = &Object{0, "default"}
+
 var (
-	//	pool = sync.Pool{New: func() any {
-	//		return &Object{1, "first"}
-	//	}}
 	pool = sync.Pool{New: func() any {
-		return new(Object)
+		return defaultObject
 	}}
 )
 

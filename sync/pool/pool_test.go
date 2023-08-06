@@ -7,7 +7,7 @@ import (
 )
 
 func TestPool(t *testing.T) {
-	assert.Equal(t, new(Object), pool.Get().(*Object))
+	assert.Equal(t, defaultObject, pool.Get().(*Object))
 	first := &Object{1, "first"}
 	pool.Put(first)
 	assert.Equal(t, first, pool.Get().(*Object))
@@ -17,12 +17,12 @@ func TestPool(t *testing.T) {
 	second.Title = "second(edited)"
 	pool.Put(second)
 	assert.Equal(t, second, pool.Get().(*Object))
-	assert.Equal(t, new(Object), pool.Get().(*Object))
-	assert.Equal(t, new(Object), pool.Get().(*Object))
-	assert.Equal(t, new(Object), pool.Get().(*Object))
+	assert.Equal(t, defaultObject, pool.Get().(*Object))
+	assert.Equal(t, defaultObject, pool.Get().(*Object))
+	assert.Equal(t, defaultObject, pool.Get().(*Object))
 	pool.Put(second)
 	assert.Equal(t, second, pool.Get().(*Object))
-	assert.Equal(t, new(Object), pool.Get().(*Object))
+	assert.Equal(t, defaultObject, pool.Get().(*Object))
 	var wg sync.WaitGroup
 	wg.Add(2)
 	go func() {
