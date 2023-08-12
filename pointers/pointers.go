@@ -1,7 +1,7 @@
 package pointers
 
 type SupportedType interface {
-	bool | uint | string
+	~bool | ~uint | ~string
 }
 
 // New returns the pointer address of the given SupportedType value.
