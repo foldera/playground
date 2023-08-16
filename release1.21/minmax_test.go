@@ -1,4 +1,4 @@
-package minmax
+package release1_21
 
 import (
 	"cmp"
