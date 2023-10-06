@@ -30,9 +30,9 @@ func (u *userRepository) Create(ctx context.Context, age int, name string) (*ent
 }
 
 func (u *userRepository) AddCars(ctx context.Context, userId int, cars []*ent.Car) error {
-	user, err := u.client.User.Get(ctx, userId)
+	model, err := u.client.User.Get(ctx, userId)
 	if err != nil {
 		return fmt.Errorf("user with id=%d not found: %w", userId, err)
 	}
-	return user.Update().AddCars(cars...).Exec(ctx)
+	return model.Update().AddCars(cars...).Exec(ctx)
 }
