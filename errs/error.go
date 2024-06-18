@@ -32,9 +32,7 @@ type Handler func(err error) Error
 
 func Handle(err error, handlers ...Handler) error {
 	switch err.(type) {
-	case nil:
-		return nil
-	case Error:
+	case nil, Error:
 		return err
 	default:
 		for _, handle := range handlers {
