@@ -96,3 +96,13 @@ func TestHandle(t *testing.T) {
 		})
 	}
 }
+
+func TestTrace(t *testing.T) {
+	notFound := errs.New(NotFound, "something not found")
+	assert.Equal(t, []error{NotFound.Err()}, notFound.Trace())
+
+	cause1 := errors.New("cause1")
+	cause2 := fmt.Errorf("cause2 caused by (%w)", cause1)
+	notFoundCausedBy := errs.New(NotFound, "something not found").CausedBy(cause2)
+	assert.Equal(t, []error{NotFound.Err(), cause2, cause1}, notFoundCausedBy.(errs.Error).Trace())
+}

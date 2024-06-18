@@ -1,8 +1,6 @@
 package errs
 
-import (
-	"fmt"
-)
+import "fmt"
 
 type Code interface {
 	Index() int
@@ -12,6 +10,7 @@ type Code interface {
 type Error interface {
 	error
 	Code() Code
+	Trace() []error
 	CausedBy(parent error) error
 }
 
@@ -19,13 +18,10 @@ func New(code Code, msg string) Error {
 	if code == nil {
 		return nil
 	}
-	var err error
-	if msg != "" {
-		err = fmt.Errorf("[%d][%w]::%s", code.Index(), code.Err(), msg)
-	} else {
-		err = fmt.Errorf("[%d][%w]", code.Index(), code.Err())
+	return &custom{
+		msg: msg, code: code,
+		error: fmt.Errorf("[%d][%w]::%q", code.Index(), code.Err(), msg),
 	}
-	return &custom{msg: msg, code: code, error: err}
 }
 
 type Handler func(err error) Error
