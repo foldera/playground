@@ -7,11 +7,15 @@ type Code interface {
 	Err() error
 }
 
-type Error interface {
+type Reporter interface {
 	error
 	Code() Code
 	Trace() []error
-	CausedBy(parent error) error
+}
+
+type Error interface {
+	Reporter
+	CausedBy(parent error) Reporter
 }
 
 func New(code Code, msg string) Error {

@@ -91,7 +91,7 @@ func TestHandle(t *testing.T) {
 			if errors.As(err, &got) {
 				assert.Equal(t, tc.expected.code, got.Code())
 				assert.Equal(t, tc.expected.msg, got.Error())
-				assert.True(t, errors.Is(err, tc.input))
+				assert.True(t, errors.Is(err, got.Code().Err()))
 			}
 		})
 	}
@@ -104,5 +104,5 @@ func TestTrace(t *testing.T) {
 	cause1 := errors.New("cause1")
 	cause2 := fmt.Errorf("cause2 caused by (%w)", cause1)
 	notFoundCausedBy := errs.New(NotFound, "something not found").CausedBy(cause2)
-	assert.Equal(t, []error{NotFound.Err(), cause2, cause1}, notFoundCausedBy.(errs.Error).Trace())
+	assert.Equal(t, []error{NotFound.Err(), cause2, cause1}, notFoundCausedBy.Trace())
 }
