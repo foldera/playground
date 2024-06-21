@@ -4,32 +4,38 @@ import "fmt"
 
 type List[T any] []T
 
-func NewList[T any, L ~[]M, M any](models L, mappers ...Mapper[M, T]) (List[T], error) {
+func (l List[T]) Append(elems ...T) List[T] {
+	return append(l, elems...)
+}
+
+func (l List[T]) Slice() []T {
+	return l
+}
+
+func NewList[T any, L ~[]M, M any](models L, convert Mapper[M, T]) (List[T], error) {
 	var err error
 	switch {
-	case models == nil, len(models) == 0:
-		var target T
-		return nil, fmt.Errorf("trying to create new List[%T] using nil %T", target, models)
-
-	case mappers == nil, len(mappers) == 0:
+	case convert == nil:
 		var target T
 		return nil, fmt.Errorf("trying to create new List[%T] without any mapper", target)
+
+	case models == nil, len(models) == 0:
+		var target T
+		return nil, fmt.Errorf("trying to create new List[%T] using nil or empty %T", target, models)
 
 	default:
 		list := make(List[T], len(models))
 		for i := range models {
-			for _, convert := range mappers {
-				if list[i], err = convert(models[i]); err != nil {
-					return nil, err
-				}
+			if list[i], err = convert(models[i]); err != nil {
+				return nil, err
 			}
 		}
 		return list, nil
 	}
 }
 
-func NewPtrList[T any, L ~[]M, M any](models L, mappers ...Mapper[M, T]) (List[*T], error) {
-	list, err := NewList[T](models, mappers...)
+func NewPtrList[T any, L ~[]M, M any](models L, convert Mapper[M, T]) (List[*T], error) {
+	list, err := NewList[T](models, convert)
 	if err != nil {
 		return nil, err
 	}
